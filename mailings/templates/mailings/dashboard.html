@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #eaeaea; /* пепельно-бумажный фон */
+  }
+</style>
+
+<div class="container py-4">
+  <h1 class="mb-4">Панель управления</h1>
+
+  <!-- Верхние карточки -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm text-center bg-light">
+        <div class="card-body">
+          <h5 class="text-muted">Всего рассылок</h5>
+          <h2 class="fw-bold text-primary">{{ total_mailings|default:0 }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm text-center bg-light">
+        <div class="card-body">
+          <h5 class="text-muted">Активные</h5>
+          <h2 class="fw-bold text-success">{{ active_mailings|default:0 }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm text-center bg-light">
+        <div class="card-body">
+          <h5 class="text-muted">Получателей</h5>
+          <h2 class="fw-bold text-danger">{{ unique_clients|default:0 }}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Две колонки -->
+  <div class="row g-4">
+    <!-- Левая колонка -->
+    <div class="col-md-8">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-dark text-white">
+          Последние попытки
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Время</th>
+                <th>Клиент</th>
+                <th>Статус</th>
+                <th>Ответ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if attempts %}
+                {% for attempt in attempts %}
+                  <tr>
+                    <td>{{ attempt.timestamp|date:"d.m.Y H:i" }}</td>
+                    <td>{{ attempt.client.email|default:"—" }}</td>
+                    <td>
+                      {% if attempt.is_success %}
+                        <span class="badge bg-success">OK</span>
+                      {% else %}
+                        <span class="badge bg-danger">ERR</span>
+                      {% endif %}
+                    </td>
+                    <td>{{ attempt.server_response|default:"—" }}</td>
+                  </tr>
+                {% endfor %}
+              {% else %}
+                <tr><td colspan="4" class="text-center text-muted">Пока нет данных</td></tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Правая колонка -->
+    <div class="col-md-4">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-dark text-white">
+          Быстрые ссылки
+        </div>
+        <div class="list-group list-group-flush">
+          <a href="{% url 'mailings:client_list' %}" class="list-group-item list-group-item-action">
+            Получатели
+          </a>
+          <a href="{% url 'mailings:message_list' %}" class="list-group-item list-group-item-action">
+            Сообщения
+          </a>
+          <a href="{% url 'mailings:mailing_list' %}" class="list-group-item list-group-item-action">
+            Рассылки
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

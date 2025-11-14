@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Профиль{% endblock %}
+{% block content %}
+<div class="col-md-8 mx-auto mt-5">
+  <div class="card text-bg-dark border-secondary">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span class="h4 mb-0">Профиль</span>
+      <a class="btn btn-sm btn-outline-light" href="{% url 'users:profile_edit' %}">
+        Редактировать
+      </a>
+    </div>
+    <div class="card-body">
+      <dl class="row mb-0">
+        <dt class="col-sm-3">Email (логин)</dt>
+        <dd class="col-sm-9">{{ request.user.email }}</dd>
+
+        <dt class="col-sm-3">Имя</dt>
+        <dd class="col-sm-9">{{ request.user.first_name|default:"—" }}</dd>
+
+        <dt class="col-sm-3">Фамилия</dt>
+        <dd class="col-sm-9">{{ request.user.last_name|default:"—" }}</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+{% endblock %}
