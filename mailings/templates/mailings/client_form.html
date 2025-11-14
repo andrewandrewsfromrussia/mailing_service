@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{{ view.object|default:'Новый получатель' }}{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">{{ view.object|default:'Новый получатель' }}</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <div class="mt-3">
+    <button class="btn btn-primary" type="submit">Сохранить</button>
+    <a class="btn btn-outline-light" href="{% url 'mailings:client_list' %}">Отмена</a>
+  </div>
+</form>
+{% endblock %}
